@@ -30,7 +30,8 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
-    const phoneCollection = client.db("phoneDB").collection("phones")
+    const phoneCollection = client.db("phoneDB").collection("phones");
+    const favouritesCollection = client.db("phoneDB").collection("favourites");
 
     app.get('/phones', async(req, res) => {
         const result = await phoneCollection.find().toArray();
@@ -41,10 +42,30 @@ async function run() {
         const id = req.params.id;
         const query = {id: id};
         const options ={
-          projection: {_id: 0, id: 1, image: 1, phone_name: 1, brand_name: 1}
+          projection: {_id: 0, id: 1, image: 1, phone_name: 1, brand_name: 1, price: 1}
         }
         const result = await phoneCollection.findOne(query, options);
         res.send(result);
+    })
+    app.get('/favourites', async(req, res) => {
+      const result = await favouritesCollection.find().toArray();
+      res.send(result);
+    })
+    app.post('/favourites', async(req, res) => {
+      const data = req.body;
+      const result = await favouritesCollection.insertOne(data);
+      res.send(result);
+    })
+    app.get('/favourites/:email', async(req, res) => {
+      const email = req.params.email;
+      const result = await favouritesCollection.find({email: email}).toArray();
+      res.send(result);
+    })
+    app.delete('/favourites/:email', async(req, res) => {
+      const email = req.params.email;
+      const query = {email: email};
+      const result = await favouritesCollection.deleteMany(query);
+      res.send(result);
     })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
