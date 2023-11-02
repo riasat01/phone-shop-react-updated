@@ -2,9 +2,12 @@ import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import Home from "../pages/home/Home";
 import Favourites from "../pages/favourites/Favourites";
-import Login from "../pages/login/Login";
+import LoginPage from "../pages/login-page/LoginPage";
 import PhoneDetails from "../pages/phone-details/PhoneDetails";
 import ErrorPage from "../pages/error-page/ErrorPage";
+import Login from "../components/login/Login";
+import Register from "../components/register/Register";
+import PrivateRoute from "./PrivateRoute";
 
 const myRouter = createBrowserRouter([
     {
@@ -19,15 +22,25 @@ const myRouter = createBrowserRouter([
             },
             {
                 path: `/favourites`,
-                element:<Favourites></Favourites>
+                element:<PrivateRoute><Favourites></Favourites></PrivateRoute>
             },
             {
                 path: `/login`,
-                element:<Login></Login>
+                element:<LoginPage></LoginPage>,
+                children: [
+                    {
+                        path: '/login',
+                        element: <Login></Login>
+                    },
+                    {
+                        path: '/login/register',
+                        element: <Register></Register>
+                    }
+                ]
             },
             {
                 path: '/phone/:id',
-                element:<PhoneDetails></PhoneDetails>,
+                element:<PrivateRoute><PhoneDetails></PhoneDetails></PrivateRoute>,
                 loader: () => fetch(`../phones.json`)
             }
         ]
