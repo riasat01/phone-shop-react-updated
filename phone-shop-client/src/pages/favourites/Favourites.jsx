@@ -1,22 +1,26 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 // import Phones from "../../components/phones/Phones";
 import ShowFavourites from "../../components/show-favourites/ShowFavourites";
+import axios from "axios";
+import swal from "sweetalert";
+import { UserAuth } from "../../components/auth-provider/AuthProvider";
 
 const Favourites = () => {
 
     const [favourites, setFavourites] = useState([]);
     const [notFound, setNotFound] = useState(false);
     const [price, setPrice] = useState(0);
+    const { user } = useContext(UserAuth);
+
 
     useEffect(() => {
-        const _ = JSON.parse(localStorage.getItem(`favourites`));
-        // console.log(_)
-        if (_) {
-            setFavourites(_);
-        } else {
-            setNotFound(true);
-        }
-    }, []);
+        axios.get(`http://localhost:5000/favourites/${user?.email}`)
+            .then(data => setFavourites(data.data))
+            .catch(error => swal('Error', `${error.message}`, 'error'));
+        // const total = favourites?.reduce((preValue, currentValue) => preValue + currentValue.price, 0);
+        // setPrice(total.toFixed(2));
+    }, [])
+
 
     useEffect(() => {
         const total = favourites.reduce((preValue, currentValue) => preValue + currentValue.price, 0);
@@ -25,9 +29,15 @@ const Favourites = () => {
 
 
     const handleDelete = () => {
-        localStorage.clear();
-        setFavourites([]);
-        setNotFound(true);
+        // localStorage.clear();
+        
+        axios.delete(`http://localhost:5000/favourites/${user?.email}`)
+        .then(data => {
+            console.log(data);
+            setNotFound(true);
+            setFavourites([]);
+        })
+        .catch(error => console.log(error.message));
     }
 
     return (

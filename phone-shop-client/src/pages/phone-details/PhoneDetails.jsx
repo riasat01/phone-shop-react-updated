@@ -1,38 +1,58 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { Link, useLoaderData, useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { UserAuth } from "../../components/auth-provider/AuthProvider";
+import swal from "sweetalert";
 
 const PhoneDetails = () => {
+    const { user } = useContext(UserAuth);
     const [phone, setPhone] = useState({});
-    const {id} = useParams();
+    const { id } = useParams();
     useEffect(() => {
         axios.get(`http://localhost:5000/phones/${id}`)
-            .then(data => {console.log(data); setPhone(data.data)})
+            .then(data => { setPhone(data.data) })
             .catch(error => console.log(error.message));
     }, [])
 
 
-    const { image, phone_name, brand_name } = phone;
+    const { image, phone_name, brand_name, price } = phone;
 
-    const handleAddToFavourites =  phone => {
+    const handleAddToFavourites = phone => {
         // console.log(phone);
-        const temp = [];
-        const favourite = JSON.parse(localStorage.getItem(`favourites`));
-        if(favourite){
-            const exists = favourite?.find(phon => phon.id === id);
-            if(exists){
-                alert(`No duplicates allowed`)
-            }else{
-                console.log(exists)
-                temp.push(...favourite, phone);
-                console.log(temp);
-                localStorage.setItem(`favourites`, JSON.stringify(temp));
-                alert(`Successfully added`)
-            }
-        }else{
-            temp.push(phone);
-            localStorage.setItem(`favourites`, JSON.stringify(temp));
-        }
+        // const temp = [];
+        // const favourite = JSON.parse(localStorage.getItem(`favourites`));
+        // if(favourite){
+        //     const exists = favourite?.find(phon => phon.id === id);
+        //     if(exists){
+        //         alert(`No duplicates allowed`)
+        //     }else{
+        //         console.log(exists)
+        //         temp.push(...favourite, phone);
+        //         console.log(temp);
+        //         localStorage.setItem(`favourites`, JSON.stringify(temp));
+        //         alert(`Successfully added`)
+        //     }
+        // }else{
+        //     temp.push(phone);
+        //     localStorage.setItem(`favourites`, JSON.stringify(temp));
+        // }
+        // const data = { ...phone, email: user.email };
+        // console.log(data);
+        axios.get(`http://localhost:5000/favourites/${user.email}`)
+            .then(data => {
+                const item = data?.data?.find(info => info.id === phone.id)
+                // console.log(item);
+                if(item){
+                    swal('Error', 'Item slreaady exist', 'error')
+                    return;
+                }else{
+                    const info = { ...phone, email: user.email };
+                    axios.post('http://localhost:5000/favourites', info)
+                    .then(() => swal('Success', 'Item added successfully', 'success'))
+                    .catch(error => swal('Error', `${error.message}`, 'error'));
+                }
+            })
+            .catch(error => swal('Error', `${error.message}`, 'error'));
     }
     return (
         <div className="flex justify-center items-center h-screen">
@@ -57,6 +77,7 @@ const PhoneDetails = () => {
                         selling licenses. Yet its own business model disruption is only part of
                         the story
                     </p> */}
+                    <p>{price}</p>
                     <Link className="inline-block">
                         <button onClick={() => handleAddToFavourites(phone)}
                             className="flex select-none items-center gap-2 rounded-lg py-3 px-0 text-center align-middle font-sans text-xs font-bold uppercase text-blue-500 transition-all hover:bg-pink-500/10 active:bg-pink-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"

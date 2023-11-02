@@ -40,8 +40,7 @@ const myRouter = createBrowserRouter([
             },
             {
                 path: '/phone/:id',
-                element:<PrivateRoute><PhoneDetails></PhoneDetails></PrivateRoute>,
-                loader: () => fetch(`../phones.json`)
+                element:<PrivateRoute><PhoneDetails></PhoneDetails></PrivateRoute>
             }
         ]
     }

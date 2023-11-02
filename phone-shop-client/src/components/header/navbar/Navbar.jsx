@@ -8,7 +8,7 @@ import default_img from '../../../assets/react.svg'
 const Navbar = () => {
 
     const { user, logOut } = useContext(UserAuth);
-    console.log(user);
+    // console.log(user);
     const handleSignOut = () => {
         logOut()
         .then(() => swal(`Info`, `You've sign out successfully`, 'info'))
