@@ -10,7 +10,11 @@ const CookieParser = require('cookie-parser');
 // built in middleware
 
 app.use(cors({
-  origin: ['http://localhost:5173'],
+  origin: [
+    // 'http://localhost:5173'
+    'https://phone-shop-3c329.web.app',
+    'https://phone-shop-3c329.firebaseapp.com'
+  ],
   credentials: true
 }));
 app.use(express.json());
