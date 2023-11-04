@@ -2,6 +2,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthState
 import { createContext, useEffect, useState } from "react";
 import auth from "../../firebase/firebase.config";
 import PropTypes from 'prop-types'
+import axios from "axios";
 
 export const UserAuth = createContext(null);
 
@@ -21,11 +22,27 @@ const AuthProvider = ({children}) => {
 
     // get current user status
     useEffect(() => {
-        onAuthStateChanged(auth, (currentUser) => {
+        const unsubscsribe = onAuthStateChanged(auth, (currentUser) => {
+            const email = currentUser?.email || user?.email;
+            const loggeduser = {email: email};
             setUser(currentUser);
             setLoading(false);
+            // if user exitst then issue a token
+            if(loggeduser.email){
+                axios.post('http://localhost:5000/jwt', loggeduser, { withCredentials: true })
+                .then(res => {
+                    console.log('token response', res.data);
+                })
+            }else{
+                axios.post('http://localhost:5000/logout', loggeduser, { withCredentials: true })
+                .then(res => {
+                    console.log(res.data);
+                })
+            }
           });
-          
+          return () => {
+            unsubscsribe();
+          }
     }, [])
 
     // update user name

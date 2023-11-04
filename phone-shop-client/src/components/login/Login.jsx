@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { UserAuth } from "../auth-provider/AuthProvider";
 import swal from 'sweetalert';
-import axios from "axios";
+// import axios from "axios";
 
 const Login = () => {
 
@@ -20,12 +20,12 @@ const Login = () => {
         .then(userCredential => {
             // console.log(userCredential);
             swal(`Congratularion ${userCredential.user.displayName}`, `You've logged in successfully`, 'success');
-            
-            axios.post('http://localhost:5000/jwt', {email}, {withCredentials: true})
-            .then(res => {
-                console.log(res.data.success);
-                res.data.success && navigate(location?.state ? location.state : '/');
-            })
+            navigate(location?.state ? location.state : '/');
+            // axios.post('http://localhost:5000/jwt', {email}, {withCredentials: true})
+            // .then(res => {
+            //     console.log(res.data.success);
+            //     res.data.success && navigate(location?.state ? location.state : '/');
+            // })
         })
         .catch(error => swal('Error', `${error.message}`, 'error'));
     }
