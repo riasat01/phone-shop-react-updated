@@ -1,21 +1,31 @@
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { UserAuth } from "../auth-provider/AuthProvider";
 import swal from 'sweetalert';
+import axios from "axios";
 
 const Login = () => {
 
     const {signIn} = useContext(UserAuth);
+    const navigate = useNavigate();
+    const location = useLocation();
+
     const handleSignIn = e => {
         e.preventDefault()
         const form = e.target;
         const email = form.email.value;
         const password = form.password.value;
-        console.log(email, password);
+        // console.log(email, password);
         signIn(email, password)
         .then(userCredential => {
-            console.log(userCredential);
-            swal(`Congratularion ${userCredential.displayName}`, `You've logged in successfully`, 'success')
+            // console.log(userCredential);
+            swal(`Congratularion ${userCredential.user.displayName}`, `You've logged in successfully`, 'success');
+            
+            axios.post('http://localhost:5000/jwt', {email}, {withCredentials: true})
+            .then(res => {
+                console.log(res.data.success);
+                res.data.success && navigate(location?.state ? location.state : '/');
+            })
         })
         .catch(error => swal('Error', `${error.message}`, 'error'));
     }

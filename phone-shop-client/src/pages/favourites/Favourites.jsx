@@ -14,7 +14,7 @@ const Favourites = () => {
 
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/favourites/${user?.email}`)
+        axios.get(`http://localhost:5000/favourites/${user?.email}`, {withCredentials: true})
             .then(data => setFavourites(data.data))
             .catch(error => swal('Error', `${error.message}`, 'error'));
         // const total = favourites?.reduce((preValue, currentValue) => preValue + currentValue.price, 0);

@@ -9,7 +9,7 @@ const PhoneDetails = () => {
     const [phone, setPhone] = useState({});
     const { id } = useParams();
     useEffect(() => {
-        axios.get(`http://localhost:5000/phones/${id}`)
+        axios.get(`http://localhost:5000/phones/${id}?email=${user?.email}`, {withCredentials: true})
             .then(data => { setPhone(data.data) })
             .catch(error => console.log(error.message));
     }, [])
