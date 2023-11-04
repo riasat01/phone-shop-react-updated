@@ -4,7 +4,7 @@ import useUeserAuth from "./useUeserAuth";
 import swal from "sweetalert";
 
 const AxiosSecure = axios.create({
-    baseURL: 'http://localhost:5000',
+    baseURL: 'https://phone-shop-server-steel.vercel.app',
     withCredentials: true
 })
 

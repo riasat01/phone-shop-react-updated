@@ -9,7 +9,7 @@ const PhoneDetails = () => {
     const [phone, setPhone] = useState({});
     const { id } = useParams();
     useEffect(() => {
-        axios.get(`http://localhost:5000/phones/${id}?email=${user?.email}`, {withCredentials: true})
+        axios.get(`https://phone-shop-server-steel.vercel.app/phones/${id}?email=${user?.email}`, {withCredentials: true})
             .then(data => { setPhone(data.data) })
             .catch(error => console.log(error.message));
     }, [])
@@ -38,7 +38,7 @@ const PhoneDetails = () => {
         // }
         // const data = { ...phone, email: user.email };
         // console.log(data);
-        axios.get(`http://localhost:5000/favourites/${user.email}`)
+        axios.get(`https://phone-shop-server-steel.vercel.app/favourites/${user.email}`)
             .then(data => {
                 const item = data?.data?.find(info => info.id === phone.id)
                 // console.log(item);
@@ -47,7 +47,7 @@ const PhoneDetails = () => {
                     return;
                 }else{
                     const info = { ...phone, email: user.email };
-                    axios.post('http://localhost:5000/favourites', info)
+                    axios.post('https://phone-shop-server-steel.vercel.app/favourites', info)
                     .then(() => swal('Success', 'Item added successfully', 'success'))
                     .catch(error => swal('Error', `${error.message}`, 'error'));
                 }

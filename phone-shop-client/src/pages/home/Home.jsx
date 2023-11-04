@@ -6,7 +6,7 @@ import axios from "axios";
 const Home = () => {
     const [phones, setPhones] = useState([]);
     useEffect(() => {
-        axios.get(`http://localhost:5000/phones`)
+        axios.get(`https://phone-shop-server-steel.vercel.app/phones`)
             .then(data => setPhones(data.data))
             .catch(error => console.log(error.message));
     }, [])

@@ -21,7 +21,7 @@ const Login = () => {
             // console.log(userCredential);
             swal(`Congratularion ${userCredential.user.displayName}`, `You've logged in successfully`, 'success');
             navigate(location?.state ? location.state : '/');
-            // axios.post('http://localhost:5000/jwt', {email}, {withCredentials: true})
+            // axios.post('https://phone-shop-server-steel.vercel.app/jwt', {email}, {withCredentials: true})
             // .then(res => {
             //     console.log(res.data.success);
             //     res.data.success && navigate(location?.state ? location.state : '/');

@@ -16,7 +16,7 @@ const Favourites = () => {
 
 
     useEffect(() => {
-        // axios.get(`http://localhost:5000/favourites/${user?.email}`, {withCredentials: true})
+        // axios.get(`https://phone-shop-server-steel.vercel.app/favourites/${user?.email}`, {withCredentials: true})
         axiosSecure.get(`/favourites/${user?.email}`)
             .then(data => setFavourites(data.data))
             .catch(error => swal('Error', `${error.message}`, 'error'));
@@ -34,7 +34,7 @@ const Favourites = () => {
     const handleDelete = () => {
         // localStorage.clear();
         
-        axios.delete(`http://localhost:5000/favourites/${user?.email}`)
+        axios.delete(`https://phone-shop-server-steel.vercel.app/favourites/${user?.email}`)
         .then(data => {
             console.log(data);
             setNotFound(true);

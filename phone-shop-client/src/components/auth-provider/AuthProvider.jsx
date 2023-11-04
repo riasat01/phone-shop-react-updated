@@ -29,12 +29,12 @@ const AuthProvider = ({children}) => {
             setLoading(false);
             // if user exitst then issue a token
             if(loggeduser.email){
-                axios.post('http://localhost:5000/jwt', loggeduser, { withCredentials: true })
+                axios.post('https://phone-shop-server-steel.vercel.app/jwt', loggeduser, { withCredentials: true })
                 .then(res => {
                     console.log('token response', res.data);
                 })
             }else{
-                axios.post('http://localhost:5000/logout', loggeduser, { withCredentials: true })
+                axios.post('https://phone-shop-server-steel.vercel.app/logout', loggeduser, { withCredentials: true })
                 .then(res => {
                     console.log(res.data);
                 })
