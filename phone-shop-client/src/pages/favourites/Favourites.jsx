@@ -4,6 +4,7 @@ import ShowFavourites from "../../components/show-favourites/ShowFavourites";
 import axios from "axios";
 import swal from "sweetalert";
 import { UserAuth } from "../../components/auth-provider/AuthProvider";
+import useAxiosSecure from "../../custom-hooks/useAxiosSecure";
 
 const Favourites = () => {
 
@@ -11,10 +12,12 @@ const Favourites = () => {
     const [notFound, setNotFound] = useState(false);
     const [price, setPrice] = useState(0);
     const { user } = useContext(UserAuth);
+    const axiosSecure = useAxiosSecure();
 
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/favourites/${user?.email}`, {withCredentials: true})
+        // axios.get(`http://localhost:5000/favourites/${user?.email}`, {withCredentials: true})
+        axiosSecure.get(`/favourites/${user?.email}`)
             .then(data => setFavourites(data.data))
             .catch(error => swal('Error', `${error.message}`, 'error'));
         // const total = favourites?.reduce((preValue, currentValue) => preValue + currentValue.price, 0);
