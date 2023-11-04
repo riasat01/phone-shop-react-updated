@@ -58,7 +58,10 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
+
+
     // auth related api 
+
     app.post('/jwt', async (req, res) => {
       const user = req.body;
       // console.log(user);
@@ -72,7 +75,15 @@ async function run() {
       .send({success: true});
     })
 
+    app.post('/logout', async (req, res) => {
+      const user = req.body;
+      // console.log('logging out user', user);
+      res.clearCookie('token', {maxAge: 0}).send({success: true})
+    })
+
+
     // services realated api
+
     const phoneCollection = client.db("phoneDB").collection("phones");
     const favouritesCollection = client.db("phoneDB").collection("favourites");
 
